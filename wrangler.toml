@@ -11,7 +11,7 @@ r2_buckets = [
   { binding = "REGISTRY", bucket_name = "r2-registry" }
 ]
 routes = [
-  { pattern = "registry.e-whisper.com", custom_domain = true }
+  { pattern = "registry-mirror.e-whisper.com", custom_domain = true }
 ]
 
 [env.production.vars]
