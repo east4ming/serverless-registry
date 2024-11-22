@@ -12,7 +12,7 @@ routes = [{ pattern = "registry-mirror.e-whisper.com", custom_domain = true }]
 
 [env.production.vars]
 JWT_REGISTRY_TOKENS_PUBLIC_KEY = ""
-REGISTRIES_JSON = "[{ \"registry\": \"https://docker.io\", \"password_env\": \"REGISTRY_TOKEN\", \"username\": \"caseycui\" }]"
+REGISTRIES_JSON = "[{ \"registry\": \"https://index.docker.io\", \"password_env\": \"REGISTRY_TOKEN\", \"username\": \"caseycui\" }]"
 # Secrets:
 # USERNAME/PASSWORD if you want username/password based auth
 
