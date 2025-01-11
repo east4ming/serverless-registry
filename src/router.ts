@@ -43,6 +43,7 @@ v2Router.get("/_catalog", async (req, env: Env) => {
     {
       headers: {
         Link: `${url.protocol}//${url.hostname}${url.pathname}?n=${n ?? 1000}&last=${response.cursor ?? ""}; rel=next`,
+        "Content-Type": "application/json",
       },
     },
   );
@@ -329,7 +330,7 @@ v2Router.delete("/:name+/blobs/uploads/:id", async (req, env: Env) => {
 
 // this is the first thing that the client asks for in an upload
 v2Router.post("/:name+/blobs/uploads/", async (req, env: Env) => {
-   const { name } = req.params;
+  const { name } = req.params;
   const [uploadObject, err] = await wrap<UploadObject | RegistryError, Error>(env.REGISTRY_CLIENT.startUpload(name));
 
   if (err) {

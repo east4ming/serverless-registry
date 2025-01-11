@@ -32,31 +32,31 @@ import { ManifestSchema, manifestSchema } from "../manifest";
 
 export type Chunk =
   | {
-      // Chunk that is less than 5GiB and respects the Chunk chain.
-      // If you want to append to the chunk list see the following rules:
-      // - If same size as last chunk, it's a normal multi-part-chunk.
-      // - If not same size as last chunk, it's a multi-part-chunk-no-same-size.
-      // - If less than 10MB, it's a small-chunk.
-      type: "multi-part-chunk";
-      uploadId: string;
-      size: number;
-    }
+    // Chunk that is less than 5GiB and respects the Chunk chain.
+    // If you want to append to the chunk list see the following rules:
+    // - If same size as last chunk, it's a normal multi-part-chunk.
+    // - If not same size as last chunk, it's a multi-part-chunk-no-same-size.
+    // - If less than 10MB, it's a small-chunk.
+    type: "multi-part-chunk";
+    uploadId: string;
+    size: number;
+  }
   | {
-      // Chunk that is less than 5GiB, however it's the last chunk uploaded
-      // but it's above 10MB. If you want to append from this, you have to also upload to a different object
-      // so you can recover this chunk
-      type: "multi-part-chunk-no-same-size";
-      uploadId: string;
-      r2Path: string;
-      size: number;
-    }
+    // Chunk that is less than 5GiB, however it's the last chunk uploaded
+    // but it's above 10MB. If you want to append from this, you have to also upload to a different object
+    // so you can recover this chunk
+    type: "multi-part-chunk-no-same-size";
+    uploadId: string;
+    r2Path: string;
+    size: number;
+  }
   | {
-      // Small chunk that is less than 10MB
-      type: "small-chunk";
-      size: number;
-      r2Path: string;
-      uploadId: string;
-    };
+    // Small chunk that is less than 10MB
+    type: "small-chunk";
+    size: number;
+    r2Path: string;
+    uploadId: string;
+  };
 
 export type State = {
   parts: R2UploadedPart[];
@@ -120,7 +120,7 @@ export async function getUploadState(
     throw new InternalError();
   }
 
-  if (!verifyHash && stateStrHash !== verifyHash) {
+  if (verifyHash !== undefined && stateStrHash !== verifyHash) {
     return new RangeError(stateStrHash, stateObject);
   }
 
@@ -719,6 +719,7 @@ export class R2Registry implements Registry {
 
     const upload = this.env.REGISTRY.resumeMultipartUpload(state.registryUploadId, state.uploadId);
     await upload.abort();
+    await this.env.REGISTRY.delete(getRegistryUploadsPath(state));
     return true;
   }
 
