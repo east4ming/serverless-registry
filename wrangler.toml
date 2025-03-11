@@ -1,0 +1,30 @@
+name = "r2-registry"
+
+routes = [{ pattern = "registry-mirror.e-whisper.com", custom_domain = true }]
+
+workers_dev = true
+main = "./index.ts"
+compatibility_date = "2024-09-09"
+compatibility_flags = ["nodejs_compat"]
+
+## Production
+[env.production]
+r2_buckets = [{ binding = "REGISTRY", bucket_name = "r2-registry" }]
+
+
+[env.production.vars]
+JWT_REGISTRY_TOKENS_PUBLIC_KEY = ""
+REGISTRIES_JSON = "[{ \"registry\": \"https://index.docker.io\", \"password_env\": \"REGISTRY_TOKEN\", \"username\": \"caseycui\" }]"
+# Secrets:
+# USERNAME/PASSWORD if you want username/password based auth
+
+## Dev - For local dev using `npx wrangler dev`
+[env.dev]
+r2_buckets = [{ binding = "REGISTRY", bucket_name = "r2-image-registry-dev" }]
+[env.dev.vars]
+# REGISTRIES_JSON = "[{ \"registry\": \"http://localhost:9999\", \"password_env\": \"PASSWORD\", \"username\": \"hello\" }]"
+USERNAME = "hello"
+PASSWORD = "world"
+# The necessary secrets are:
+# Setup those secrets on .dev.vars in the root of the project
+#

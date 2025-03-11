@@ -2,4 +2,5 @@
 *.env
 node_modules
 *.vars
-wrangler.toml
+# wrangler.toml
+# pnpm-lock.yaml
